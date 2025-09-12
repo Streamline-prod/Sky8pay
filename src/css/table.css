@@ -1,7 +1,7 @@
 table {
   width: 100%;          /* Make table take full width */
   border-collapse: collapse;
-  table-layout: auto;   /* Allow columns to auto-expand */
+  table-layout: auto   /* Allow columns to auto-expand */
 }
 th{
   text-transform: uppercase;
