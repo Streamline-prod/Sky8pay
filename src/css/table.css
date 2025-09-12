@@ -1,0 +1,22 @@
+table {
+  width: 100%;          /* Make table take full width */
+  border-collapse: collapse;
+  table-layout: auto;   /* Allow columns to auto-expand */
+}
+th{
+  text-transform: uppercase;
+  padding: 8px 12px;    /* Some padding */
+  border: 1px solid #ccc;
+  word-wrap: break-word; /* Wrap long text instead of overflow */
+  white-space: normal;   
+}
+ td {
+  padding: 8px 12px;    /* Some padding */
+  border: 1px solid #ccc;
+  word-wrap: break-word; /* Wrap long text instead of overflow */
+  white-space: normal;   /* Allow multiple lines */
+}
+
+tr {
+  height: auto;          /* Auto-expand row height based on content */
+}
