@@ -2,15 +2,21 @@ import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { getToday } from "../../utils/CurrentDate";
-import { BindStatusMaster, BindUserListByRoleId, BindAPIListByServiceName } from "../../services/Commonapi";
-import { GetPayoutReports } from "../../services/PayoutReport";
-import { FaExclamationTriangle, FaEye, FaFileInvoice, FaReceipt } from "react-icons/fa";
+import { BindUserListByRoleId, BindAPIListByServiceName } from "../../services/Commonapi";
+import { GetPayoutInvoiceLink, GetPayoutReports } from "../../services/PayoutReport";
+import {  FaFileInvoice, FaReceipt } from "react-icons/fa";
 
 export default function PayoutReport() {
     const [userList, setUserListValue] = useState(0);
-    const [statusMasterdropdown, setStatusMasterDrowdown] = useState(0);
+    //const [statusMasterdropdown, setStatusMasterDrowdown] = useState(0);
     const [ApiMasterByServiceName, setApiMasterByServiceName] = useState(0);
     const [PayoutReportList, setPayoutReportList] = useState([]);
+    const [IsRecieptOpen, setIsRecieptOpen] = useState(false);
+    const [IsCallBackOpen, setIsCallBackOpen] = useState(false);
+    const [IsCheckStatusOpen, setIsCheckStatusOpen] = useState(false);
+    const [payoutTrData, setPayoutTrData] = useState(null);
+
+
 
     const {
         register,
@@ -25,8 +31,20 @@ export default function PayoutReport() {
 
     useEffect(() => {
         BindUserList();
-        BindStatusDropdown();
+        //BindStatusDropdown();
         BindAPIListServiceName();
+        BindPayoutReport({
+            userId: 0,
+            startDate: getToday(new Date()),
+            endDate: getToday(new Date()),
+            apiId: 0,
+            status: 1,
+            search: "",
+            pageNo: 0,
+            pageSize: 100,
+            txnFrom: 0,
+            mode: 0
+        });
     }, []);
 
     const BindUserList = async () => {
@@ -52,19 +70,18 @@ export default function PayoutReport() {
 
     const BindPayoutReport = async (data) => {
         try {
-            //console.log(data);
             const _result = await GetPayoutReports({
                 userId: data.userId,
                 startDate: data.startDate,
                 endDate: data.endDate,
                 apiId: data.apiId,
-                status: data.statusId,
+                status: 1,
                 search: data.search,
                 pageNo: 0,
                 pageSize: 100,
                 txnFrom: 0,
                 mode: 0
-            });            
+            });
             setPayoutReportList(_result);
         } catch (err) {
             Swal.fire({
@@ -97,10 +114,16 @@ export default function PayoutReport() {
         }
     }
 
-    const BindStatusDropdown = async () => {
+    const DownloadPayoutInvoice = async (data) => {
         try {
-            const _result = await BindStatusMaster({});
-            setStatusMasterDrowdown(_result);
+            const _result = await GetPayoutInvoiceLink({
+                SystemUniqueId: data.SystemUniqueId
+            });
+            const link = document.createElement("a");
+            link.href = _result.data;
+            link.target = "_blank";
+            link.download = _result.data;
+            link.click();
         } catch (err) {
             Swal.fire({
                 icon: "warning",
@@ -112,7 +135,6 @@ export default function PayoutReport() {
 
         }
     }
-
     return (
         <Box sx={{ width: '100%', maxWidth: { sm: '100%', md: '1700px' } }}>
             <div className="container mt-4">
@@ -157,19 +179,6 @@ export default function PayoutReport() {
                         </select>
                     </div>
                     <div className="col-md-6">
-                        <label>Select Status</label>
-                        <select className="form-control" {...register("StatusId")}>
-                            <option value={0}>Select Status</option>
-                            {statusMasterdropdown && Array.isArray(statusMasterdropdown.data) && statusMasterdropdown.data.length > 0 ?
-                                statusMasterdropdown.data.map((item) => (
-                                    <option value={item.Id}>{item.Name}</option>
-                                )) : (
-                                    <option>No Data Found</option>
-                                )
-                            }
-                        </select>
-                    </div>
-                    <div className="col-md-6">
                         <button type="submit" className="btn btn-success me-2">Search</button>
                         <button type="button" className="btn btn-secondary me-2">Back</button>
                     </div>
@@ -206,10 +215,8 @@ export default function PayoutReport() {
                             <th>Mode</th>
                             <th>CallBack Time</th>
                             <th>CheckStatus Time</th>
-                            {/* <th>Action</th> */}
                             <th>IP Address</th>
                             <th>Invoice</th>
-                            {/* <th>CheckStatus</th> */}
                         </tr>
                     </thead>
                     <tbody>
@@ -223,8 +230,16 @@ export default function PayoutReport() {
                                     <td>{item.ApiName}</td>
                                     <td>{item.CreatedDate}</td>
                                     <td>{item.PaymentMode}</td>
-                                    <td>{item.STATUS}</td>
-                                    <td>{item.BankPayoutId}</td>                                    
+                                    <td>
+                                        {{
+                                            //pending: <img src="./StatusSvgIcon/Rtpending.svg" alt="Pending" />,
+                                            success: <img src="./StatusSvgIcon/Rtsuccess.svg" alt="Success" />,
+                                            //failed: <img src="./StatusSvgIcon/Rtfailed.svg" alt="Failed" />
+                                        }[item.STATUS?.toLowerCase()] || (
+                                                <img src="./StatusSvgIcon/Rtsuccess.svg" alt="Success" />
+                                            )}
+                                    </td>
+                                    <td>{item.BankPayoutId}</td>
                                     <td>{new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.TransactionAmount)}</td>
                                     <td>{item.AccountHolderName}</td>
                                     <td>{item.AccountNo}</td>
@@ -239,22 +254,23 @@ export default function PayoutReport() {
                                     <td>{item.SystemUniqueId}</td>
                                     <td>{item.ApiUniqueId}</td>
                                     <td>
-                                        <button><FaReceipt/></button>
+                                        <button onClick={() => { setPayoutTrData(item); setIsRecieptOpen(true) }}><FaReceipt /></button>
                                     </td>
                                     <td>
-                                        <button><FaExclamationTriangle /></button>
+                                        {{
+                                            yes: <img src="./icons/Rtraise.svg" alt="" />,
+                                            no: <img src="./icons/Rtraise.svg" alt="" />
+                                        }[item.RasieComplaint?.toLowerCase()] || (
+                                                <img src="./icons/Rtticket.svg" />
+                                            )}
                                     </td>
                                     <td>{item.TransactionFrom}</td>
-                                    <td>{item.CallBackDateTime}</td>
-                                    <td>{item.CheckStatusDateTime}</td>
-                                    {/* <td></td> */}
+                                    <td><button onClick={() => { setPayoutTrData(item); setIsCallBackOpen(true) }}><FaReceipt /></button></td>
+                                    <td><button onClick={() => { setPayoutTrData(item); setIsCheckStatusOpen(true) }}><FaReceipt /></button></td>
                                     <td>{item.IpAddress}</td>
-                                   <td>
-                                        <button><FaFileInvoice/></button>
+                                    <td>
+                                        <button onClick={() => DownloadPayoutInvoice(item)}><FaFileInvoice /></button>
                                     </td>
-                                    {/* <td>
-                                        <button><FaEye/></button>
-                                    </td> */}
                                 </tr>
                             )) : (<tr>
                                 <td colSpan="29" className="text-center text-muted">
@@ -265,6 +281,105 @@ export default function PayoutReport() {
                     </tbody>
                 </table>
             </div>
+
+            {/* Reciept Popup start  */}
+
+            {IsRecieptOpen && payoutTrData && (
+                <div className="modal-overlay">
+                    <div className="modal-box">
+                        <h2>Reciept</h2>
+                        <table>
+                            <tbody>
+                                <tr>                                    
+                                    <td>Status</td>
+                                    <td>{payoutTrData.STATUS}</td>
+                                </tr>
+                                <tr>
+                                    <td>Payment Date</td>
+                                    <td>{payoutTrData.CreatedDate}</td>
+                                </tr>
+                                <tr>
+                                    <td>Amount</td>
+                                    <td>{payoutTrData.TransactionAmount}</td>
+                                </tr>
+                                <tr>
+                                    <td>UTR No</td>
+                                    <td>{payoutTrData.BankPayoutId}</td>
+                                </tr>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>{payoutTrData.AccountHolderName}</td>
+                                </tr>
+                                <tr>
+                                    <td>Account No</td>
+                                    <td>{payoutTrData.AccountNo}</td>
+                                </tr>
+                                <tr>
+                                    <td>IFSC</td>
+                                    <td>{payoutTrData.IfscCode}</td>
+                                </tr>
+                                <tr>
+                                    <td>Invoice No</td>
+                                    <td>{payoutTrData.SystemUniqueId}</td>
+                                </tr>
+                                <tr>
+                                    <td>Reference Id</td>
+                                    <td>{payoutTrData.ReferenceId}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div className="col-md-6">
+                            <button type="button" onClick={() => setIsRecieptOpen(false)} className="btn btn-secondary me-2">Back</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Reciept Popup end */}
+
+
+            {/* CallBack Popup start  */}
+
+            {IsCallBackOpen && payoutTrData && (
+                <div className="modal-overlay">
+                    <div className="modal-box">
+                        <h2>CallBack Details</h2>
+                        <div className="col-md-12">
+                            <label>CallBack Date & Time</label>
+                            <label>{payoutTrData.CallBackDateTime}</label>
+                            <label>CallBack Response</label>
+                            <label style={{ lineBreak: "anywhere" }}>{payoutTrData.CallBackResponse}</label>
+                        </div>
+                        <div className="col-md-6">
+                            <button type="button" onClick={() => setIsCallBackOpen(false)} className="btn btn-secondary me-2">Back</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* CallBack Popup end */}
+
+            {/* CallCheckStatus Popup start  */}
+
+            {IsCheckStatusOpen && payoutTrData && (
+                <div className="modal-overlay">
+                    <div className="modal-box">
+                        <h2>CallBack Details</h2>
+                        <div className="col-md-12">
+                            <label>CallBack Date & Time</label>
+                            <label>{payoutTrData.CheckStatusDateTime}</label>
+                            <label>CallBack Response</label>
+                            <label style={{ lineBreak: "anywhere" }}>{payoutTrData.CheckStatusResponse}</label>
+                        </div>
+                        <div className="col-md-6">
+                            <button type="button" onClick={() => setIsCheckStatusOpen(false)} className="btn btn-secondary me-2">Back</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* CallCheckStatus Popup end */}
+
         </Box>
     )
 }

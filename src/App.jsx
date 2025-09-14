@@ -46,6 +46,11 @@ import DeletedLien from './pages/Lien/DeletedLien';
 import TicketReport from './pages/HelpDesk/TicketReport';
 import FraudCustomer from './pages/HelpDesk/FraudCustomer';
 import PayoutReport from './pages/PayoutReports/PayoutReport';
+import PendingPayoutReport from './pages/PayoutReports/PendingPayoutReport';
+import FailedPayoutReport from './pages/PayoutReports/FailedPayoutReport';
+import PayoutLedger from './pages/PayoutReports/PayoutLedger';
+import GarbagePayout from './pages/PayoutReports/GarbagePayout';
+import BulkPayout from './pages/PayoutReports/BulkPayout';
 //import { useEffect, useState } from "react";
 //import Spinner from './components/Loader/Spinner';
 
@@ -161,10 +166,11 @@ const mainListItems = [
     icon: <img src="/icons/payoutreport.svg" alt="sale" width={16} height={16} />,
     children: [
       { text: "Payout Report", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/PayoutReport" },
-      { text: "Pending Payout", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/TicketReport" },
-      { text: "Payout Ledger", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/TicketReport" },
-      { text: "Garbage Payout", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/TicketReport" },
-      { text: "Bulk Payout", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/TicketReport" }
+      { text: "Pending Payout", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/PendingPayoutReport" },
+      { text: "Failed Payout", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/FailedPayoutReport" },
+      { text: "Payout Ledger", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/PayoutLedger" },
+      { text: "Garbage Payout", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/GarbagePayout" },
+      { text: "Bulk Payout", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/BulkPayout" }
     ],
   },
   {
@@ -377,6 +383,11 @@ export default function App(props) {
                 <Route path="/DeletedLien" element={<DeletedLien />} />
 
                 <Route path='/PayoutReport' element={<PayoutReport />} />
+                <Route path='/PendingPayoutReport' element={<PendingPayoutReport />} />
+                <Route path='/FailedPayoutReport' element={<FailedPayoutReport />} />
+                <Route path='/PayoutLedger' element={<PayoutLedger />} />
+                <Route path='/GarbagePayout' element={<GarbagePayout />} />
+                <Route path='/BulkPayout' element={<BulkPayout />} />
 
                 
                 <Route path="/TicketReport" element={<TicketReport />} />
