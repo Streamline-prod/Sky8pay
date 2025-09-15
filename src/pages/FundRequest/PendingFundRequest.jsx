@@ -1,7 +1,7 @@
 import { Box } from "@mui/material"
 import { useEffect, useState } from "react"
 import Swal from "sweetalert2";
-import { BindUserListByRoleId,BindStatusMaster } from "../../services/Commonapi";
+import { BindUserListByRoleId, BindMasterData } from "../../services/Commonapi";
 import { useForm } from "react-hook-form";
 import { BindFundRequest, UpdatePendingFundRequest } from "../../services/FundRequest";
 import { StatusEnum } from "../../enums/StatusEnum";
@@ -104,7 +104,9 @@ export default function PendingFundRequest() {
 
     const BindStatusDropdown = async () => {
         try {
-            const _result = await BindStatusMaster({});
+            const _result = await BindMasterData({
+                type:"status"
+            });
             setStatusMasterDrowdown(_result);
         } catch (err) {
             Swal.fire({

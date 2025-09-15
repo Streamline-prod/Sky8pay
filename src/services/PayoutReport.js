@@ -31,11 +31,21 @@ export const CheckStatusTransaction = async (payload = {}) => {
 }
 
 export const GetPayoutLedger = async (payload = {}) => {
-    try {
+    try {        
         const response = await api.post("/Payout/PayoutLedger", payload);
         return response.data;
     } catch (error) {
         console.log("Error fetch payout ledger", error);
+        throw error;
+    }
+}
+
+export const GetGarbagePayout=async(payload={})=>{
+    try{
+const response=await api.post("/Payout/GarbagePayoutReport",payload);
+return response.data;
+    }catch(error){
+        console.log("Error fetch garbage payout",error);
         throw error;
     }
 }

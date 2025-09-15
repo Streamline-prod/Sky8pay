@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { BindUserListByRoleId, BindStatusMaster } from "../../services/Commonapi";
+import { BindUserListByRoleId, BindMasterData } from "../../services/Commonapi";
 import { useEffect, useState } from "react";
 import { GetLoanLedger } from "../../services/LoanLedger";
 import { useForm } from "react-hook-form";
@@ -59,7 +59,9 @@ export default function LoanLedgerReport() {
 
     const BindStatusDropdown = async () => {
         try {
-            const _result = await BindStatusMaster({});
+            const _result = await BindMasterData({
+                type:"status"
+            });
             setStatusMasterDrowdown(_result);
         } catch (err) {
             Swal.fire({

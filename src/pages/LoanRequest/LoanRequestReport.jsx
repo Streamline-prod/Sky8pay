@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { BindUserListByRoleId, BindStatusMaster } from "../../services/Commonapi";
+import { BindUserListByRoleId, BindMasterData } from "../../services/Commonapi";
 import { StatusEnum } from "../../enums/StatusEnum";
 import { BindLoanHistory, BindLoanRequest, UpdateLoanRequest } from '../../services/LoanRequest'
 import { FaEdit } from "react-icons/fa";
@@ -106,7 +106,9 @@ export default function LoanRequestReport() {
 
     const BindStatusDropdown = async () => {
         try {
-            const _result = await BindStatusMaster({});
+            const _result = await BindMasterData({
+                type:"status"
+            });
             setStatusMasterDrowdown(_result);
         } catch (err) {
             Swal.fire({

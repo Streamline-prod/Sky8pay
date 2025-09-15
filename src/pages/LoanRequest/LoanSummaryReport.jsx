@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form";
 import { getToday } from "../../utils/CurrentDate";
-import { BindStatusMaster, BindUserListByRoleId } from "../../services/Commonapi";
+import { BindMasterData, BindUserListByRoleId } from "../../services/Commonapi";
 import { BindLoanRequest } from "../../services/LoanRequest";
 import Swal from "sweetalert2";
 import { StatusEnum } from "../../enums/StatusEnum";
@@ -63,7 +63,9 @@ export default function LoanSummaryReport() {
 
     const BindStatusDropdown = async () => {
         try {
-            const _result = await BindStatusMaster({});
+            const _result = await BindMasterData({
+                type:"status"
+            });
             setStatusMasterDrowdown(_result);
         } catch (err) {
             Swal.fire({

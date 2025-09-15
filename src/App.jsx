@@ -51,6 +51,10 @@ import FailedPayoutReport from './pages/PayoutReports/FailedPayoutReport';
 import PayoutLedger from './pages/PayoutReports/PayoutLedger';
 import GarbagePayout from './pages/PayoutReports/GarbagePayout';
 import BulkPayout from './pages/PayoutReports/BulkPayout';
+import UnSettledPayinReport from './pages/UnSettledPayinReports/UnSettledPayinReport';
+import UnSettledPendingPayinReport from './pages/UnSettledPayinReports/UnSettledPendingPayinReport';
+import UnSettledFailedPayinReport from './pages/UnSettledPayinReports/UnSettledFailedPayinReport';
+import UnSettledLedgerReport from './pages/UnSettledPayinReports/UnSettledLedgerReport';
 //import { useEffect, useState } from "react";
 //import Spinner from './components/Loader/Spinner';
 
@@ -178,10 +182,10 @@ const mainListItems = [
     icon: <img src="/icons/payinreport.svg" alt="sale" width={16} height={16} />,
     children: [
 
-      { text: "Unsettled Payin", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/TicketReport" },
-      { text: "Pending Unsettled", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/TicketReport" },
-      { text: "Failed Unsettled", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/TicketReport" },
-      { text: "Unsettled Ledger", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/TicketReport" }
+      { text: "Unsettled Payin", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/UnSettledPayinReport" },
+      { text: "Pending Unsettled", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/UnSettledPendingPayinReport" },
+      { text: "Failed Unsettled", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/UnSettledFailedPayinReport" },
+      { text: "Unsettled Ledger", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/UnSettledLedgerReport" }
 
     ],
   },
@@ -389,6 +393,10 @@ export default function App(props) {
                 <Route path='/GarbagePayout' element={<GarbagePayout />} />
                 <Route path='/BulkPayout' element={<BulkPayout />} />
 
+<Route path='/UnSettledPayinReport' element={<UnSettledPayinReport />} />
+<Route path='/UnSettledPendingPayinReport' element={<UnSettledPendingPayinReport />} />
+<Route path='/UnSettledFailedPayinReport' element={<UnSettledFailedPayinReport />} />
+<Route path='/UnSettledLedgerReport' element={<UnSettledLedgerReport />} />
                 
                 <Route path="/TicketReport" element={<TicketReport />} />
                 <Route path="/FraudCustomer" element={<FraudCustomer />} />

@@ -5,6 +5,7 @@ import { getToday } from "../../utils/CurrentDate";
 import { BindUserListByRoleId, BindAPIListByServiceName } from "../../services/Commonapi";
 import { GetPayoutInvoiceLink, GetPayoutReports } from "../../services/PayoutReport";
 import {  FaFileInvoice, FaReceipt } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 export default function PayoutReport() {
     const [userList, setUserListValue] = useState(0);
@@ -69,7 +70,7 @@ export default function PayoutReport() {
     }
 
     const BindPayoutReport = async (data) => {
-        try {
+        try {                       
             const _result = await GetPayoutReports({
                 userId: data.userId,
                 startDate: data.startDate,
@@ -158,7 +159,7 @@ export default function PayoutReport() {
                             <option value={0}>Select API</option>
                             {ApiMasterByServiceName && Array.isArray(ApiMasterByServiceName.data) && ApiMasterByServiceName.data.length > 0 ?
                                 ApiMasterByServiceName.data.map((item) => (
-                                    <option value={item.Id}>{item.ApiName}</option>
+                                    <option value={item.ApiId}>{item.ApiName}</option>
                                 )) : (
                                     <option>No Data Found</option>
                                 )
@@ -244,12 +245,12 @@ export default function PayoutReport() {
                                     <td>{item.AccountHolderName}</td>
                                     <td>{item.AccountNo}</td>
                                     <td>{item.IfscCode}</td>
-                                    <td>{item.UpiId}</td>
-                                    <td>{item.OpenBalance}</td>
-                                    <td>{item.Surcharge}</td>
-                                    <td>{item.Gst}</td>
-                                    <td>{item.PayableAmount}</td>
-                                    <td>{item.ClosedBalance}</td>
+                                    <td>{item.UpiId}</td>                                    
+                                    {new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.OpenBalance)}                                    
+                                    {new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.Surcharge)}                                    
+                                    {new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.Gst)}                                    
+                                    {new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.PayableAmount)}                                    
+                                    {new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.ClosedBalance)}
                                     <td>{item.ReferenceId}</td>
                                     <td>{item.SystemUniqueId}</td>
                                     <td>{item.ApiUniqueId}</td>

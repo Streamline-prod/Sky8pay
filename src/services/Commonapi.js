@@ -21,9 +21,9 @@ export const BindUserListByRoleId = async (payload = {}) => {
     }
 }
 
-export const BindStatusMaster = async () => {
+export const BindMasterData = async (payload = {}) => {
     try {
-        const response = await api.post("/Masters/GetStatusMaster", {});
+        const response = await api.post("/Masters/GetMasterData", payload);
         return response.data;
     } catch (error) {
         console.log("Error fetch status master", error);
