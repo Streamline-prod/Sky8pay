@@ -18,7 +18,6 @@ import {
 } from './theme/customizations';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
-import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
 import Sales from './pages/SaleDashBoard/Sales';
 import CreateInvoice from './pages/Invoice/CreateInvoice';
 import PendingFundRequest from './pages/FundRequest/PendingFundRequest';
@@ -54,7 +53,19 @@ import BulkPayout from './pages/PayoutReports/BulkPayout';
 import UnSettledPayinReport from './pages/UnSettledPayinReports/UnSettledPayinReport';
 import UnSettledPendingPayinReport from './pages/UnSettledPayinReports/UnSettledPendingPayinReport';
 import UnSettledFailedPayinReport from './pages/UnSettledPayinReports/UnSettledFailedPayinReport';
-import UnSettledLedgerReport from './pages/UnSettledPayinReports/UnSettledLedgerReport';
+import UnSettledPayinLedgerReport from './pages/UnSettledPayinReports/UnSettledPayinLedgerReport';
+import SettledPayinReport from './pages/SettledPayinReports/SettledPayinReport';
+import SettledPedingPayinReport from './pages/SettledPayinReports/SettledPedingPayinReport';
+import SettledFailedPayinReport from './pages/SettledPayinReports/SettledFailedPayinReport';
+import SettledLedgerPayinReport from './pages/SettledPayinReports/SettledLedgerPayinReport';
+import SettledCreditReport from './pages/SettledWalletReports/SettledCreditReport';
+import SettledDebitReport from './pages/SettledWalletReports/SettledDebitReport';
+import SettledLedgerReport from './pages/SettledWalletReports/SettledLedgerReport';
+import UnSettledCreditReport from './pages/UnSettledWalletReports/UnSettledCreditReport';
+import UnSettledDebitReport from './pages/UnSettledWalletReports/UnSettledDebitReport';
+import UnSettledLedgerReport from './pages/UnSettledWalletReports/UnSettledLedgerReport';
+
+
 //import { useEffect, useState } from "react";
 //import Spinner from './components/Loader/Spinner';
 
@@ -185,7 +196,7 @@ const mainListItems = [
       { text: "Unsettled Payin", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/UnSettledPayinReport" },
       { text: "Pending Unsettled", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/UnSettledPendingPayinReport" },
       { text: "Failed Unsettled", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/UnSettledFailedPayinReport" },
-      { text: "Unsettled Ledger", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/UnSettledLedgerReport" }
+      { text: "Unsettled Ledger", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/UnSettledPayinLedgerReport" }
 
     ],
   },
@@ -193,19 +204,19 @@ const mainListItems = [
     text: 'Settled Reports',
     icon: <img src="/icons/payinreport.svg" alt="sale" width={16} height={16} />,
     children: [
-      { text: "Settled Payin", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/TicketReport" },
-      { text: "Pending Settled", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/TicketReport" },
-      { text: "Failed Settled", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/TicketReport" },
-      { text: "Settled Ledger", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/TicketReport" }
+      { text: "Settled Payin", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/SettledPayinReport" },
+      { text: "Pending Settled", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/SettledPedingPayinReport" },
+      { text: "Failed Settled", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/SettledFailedPayinReport" },
+      { text: "Settled Ledger", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/SettledLedgerPayinReport" }
     ],
   },
   {
     text: 'Settled Wallet',
     icon: <img src="/icons/settledWallet.svg" alt="sale" width={16} height={16} />,
     children: [
-      { text: "Credit Report", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/TicketReport" },
-      { text: "Debit Report", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/TicketReport" },
-      { text: "Cr/Dr Ledger", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/TicketReport" }
+      { text: "Credit Report", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/SettledCreditReport" },
+      { text: "Debit Report", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/SettledDebitReport" },
+      { text: "Cr/Dr Ledger", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/SettledLedgerReport" }
     ]
   },
   {
@@ -213,9 +224,9 @@ const mainListItems = [
     icon: <img src="/icons/unsettledWallet.svg" alt="sale" width={16} height={16} />,
     children: [
 
-      { text: "Credit Report", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/TicketReport" },
-      { text: "Debit Report", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/TicketReport" },
-      { text: "Cr/Dr Ledger", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/TicketReport" }
+      { text: "Credit Report", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/UnSettledCreditReport" },
+      { text: "Debit Report", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/UnSettledDebitReport" },
+      { text: "Cr/Dr Ledger", icon: <strong style={{ fontSize: "22px" }}>&bull;</strong>, path: "/UnSettledLedgerReport" }
 
     ],
   },
@@ -393,11 +404,26 @@ export default function App(props) {
                 <Route path='/GarbagePayout' element={<GarbagePayout />} />
                 <Route path='/BulkPayout' element={<BulkPayout />} />
 
-<Route path='/UnSettledPayinReport' element={<UnSettledPayinReport />} />
-<Route path='/UnSettledPendingPayinReport' element={<UnSettledPendingPayinReport />} />
-<Route path='/UnSettledFailedPayinReport' element={<UnSettledFailedPayinReport />} />
+                <Route path='/UnSettledPayinReport' element={<UnSettledPayinReport />} />
+                <Route path='/UnSettledPendingPayinReport' element={<UnSettledPendingPayinReport />} />
+                <Route path='/UnSettledFailedPayinReport' element={<UnSettledFailedPayinReport />} />
+                <Route path='/UnSettledPayinLedgerReport' element={<UnSettledPayinLedgerReport />} />
+
+
+                <Route path='/SettledPayinReport' element={<SettledPayinReport />} />
+                <Route path='/SettledPedingPayinReport' element={<SettledPedingPayinReport />} />
+                <Route path='/SettledFailedPayinReport' element={<SettledFailedPayinReport />} />
+                <Route path='/SettledLedgerPayinReport' element={<SettledLedgerPayinReport />} />
+
+
+                <Route path='/SettledCreditReport' element={<SettledCreditReport />} />
+                <Route path='/SettledDebitReport' element={<SettledDebitReport />} />
+                <Route path='/SettledLedgerReport' element={<SettledLedgerReport />} />
+
+
+                <Route path='/UnSettledCreditReport' element={<UnSettledCreditReport />}/>
+<Route path='/UnSettledDebitReport' element={<UnSettledDebitReport />} />
 <Route path='/UnSettledLedgerReport' element={<UnSettledLedgerReport />} />
-                
                 <Route path="/TicketReport" element={<TicketReport />} />
                 <Route path="/FraudCustomer" element={<FraudCustomer />} />
 

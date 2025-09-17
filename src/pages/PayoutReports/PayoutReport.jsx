@@ -246,11 +246,11 @@ export default function PayoutReport() {
                                     <td>{item.AccountNo}</td>
                                     <td>{item.IfscCode}</td>
                                     <td>{item.UpiId}</td>                                    
-                                    {new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.OpenBalance)}                                    
-                                    {new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.Surcharge)}                                    
-                                    {new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.Gst)}                                    
-                                    {new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.PayableAmount)}                                    
-                                    {new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.ClosedBalance)}
+                                    <td>{new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.OpenBalance)}</td>
+                                    <td>{new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.Surcharge)}</td>
+                                    <td>{new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.Gst)}</td>
+                                    <td>{new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.PayableAmount)}</td>
+                                    <td>{new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.ClosedBalance)}</td>
                                     <td>{item.ReferenceId}</td>
                                     <td>{item.SystemUniqueId}</td>
                                     <td>{item.ApiUniqueId}</td>

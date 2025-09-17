@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { getToday } from "../../utils/CurrentDate";
 import { BindUserListByRoleId, BindAPIListByServiceName } from "../../services/Commonapi";
 import { CheckStatusTransaction, GetPayoutInvoiceLink, GetPayoutReports } from "../../services/PayoutReport";
-import { FaFileInvoice, FaReceipt } from "react-icons/fa";
+import { FaEye, FaFileInvoice, FaReceipt } from "react-icons/fa";
 import Swal from "sweetalert2";
 
 export default function PendingPayoutReport() {
@@ -125,7 +125,7 @@ export default function PendingPayoutReport() {
                     title: "Success",
                     text: _result.message || "Check Status going process",
                     confirmButtonText: "Ok"
-                });                
+                });
             } else {
                 Swal.fire({
                     icon: "error",
@@ -255,12 +255,12 @@ export default function PendingPayoutReport() {
                                     <td>{item.AccountHolderName}</td>
                                     <td>{item.AccountNo}</td>
                                     <td>{item.IfscCode}</td>
-                                    <td>{item.UpiId}</td>                                    
-                                    {new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.OpenBalance)}                                    
-                                    {new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.Surcharge)}                                    
-                                    {new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.Gst)}                                    
-                                    {new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.PayableAmount)}                                    
-                                    {new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.ClosedBalance)}
+                                    <td>{item.UpiId}</td>
+                                    <td> {new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.OpenBalance)}</td>
+                                    <td> {new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.Surcharge)}</td>
+                                    <td> {new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.Gst)}</td>
+                                    <td> {new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.PayableAmount)}</td>
+                                    <td> {new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.ClosedBalance)}</td>
                                     <td>{item.ReferenceId}</td>
                                     <td>{item.SystemUniqueId}</td>
                                     <td>{item.ApiUniqueId}</td>
@@ -277,7 +277,7 @@ export default function PendingPayoutReport() {
                                     </td>
                                     <td>{item.TransactionFrom}</td>
                                     {/* <td><button onClick={() => { setPayoutTrData(item); setIsCallBackOpen(true) }}><FaReceipt /></button></td>*/}
-                                    <td><button onClick={() => CallCheckStatusTransaction(item.Id)}><FaReceipt /></button></td>
+                                    <td><button onClick={() => CallCheckStatusTransaction(item.Id)}><FaEye /></button></td>
                                     <td>{item.IpAddress}</td>
                                     {/* <td>
                                         <button onClick={() => DownloadPayoutInvoice(item)}><FaFileInvoice /></button>

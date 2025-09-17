@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 import { GetUnsettledPayinLedger, GetUnsettledPayinReport } from "../../services/PayinReport";
 import { getToday } from "../../utils/CurrentDate";
 
-export default function UnSettledLedgerReport() {
+export default function UnSettledPayinLedgerReport() {
     const [userList, setUserListValue] = useState(0);
     const [ApiMasterByServiceName, setApiMasterByServiceName] = useState(0);
     const [PayinReportList, setPayinReportList] = useState([]);
@@ -119,7 +119,7 @@ export default function UnSettledLedgerReport() {
                 apiId: data.apiId,
                 status: data.statusId,
                 search: data.search,
-                transactionTypeId: 0,
+                transactionTypeId: data.typeId,
                 pageNo: 0,
                 pageSize: 100
             });
@@ -202,7 +202,7 @@ export default function UnSettledLedgerReport() {
                         <select className="form-control" {...register("typeId")}>
                             <option value={0} key={0}>Select Type</option>
                             {txntypeMasterdropdown && Array.isArray(txntypeMasterdropdown.data) && txntypeMasterdropdown.data.length > 0 ?
-                                txntypeMasterdropdown.data.filter(x => x.Id === 1 && x.Id === 2).map((item) => (
+                                txntypeMasterdropdown.data.filter(x => x.Id === 1 || x.Id === 2).map((item) => (
                                     <option value={item.Id}>{item.TypeName}</option>
                                 )) : (
                                     <option>No Data Found</option>
@@ -259,53 +259,32 @@ export default function UnSettledLedgerReport() {
                             PayinReportList.data.map((item, index) => (
                                 <tr key={item.Id}>
                                     <td>{index + 1}</td>
-                                    <td>{item.UserName}</td>
+                                    <td>{item.Name}</td>
                                     <td>{item.CompanyName}</td>
                                     <td>{item.MobileNo}</td>
-                                    <td>{item.ApiName}</td>
+                                    <td>{item.ApiName ? item.ApiName : item.ServiceName}</td>
                                     <td>{item.CreatedDate}</td>
                                     <td>
                                         {{
-                                            //pending: <img src="./StatusSvgIcon/Rtpending.svg" alt="Pending" />,
-                                            //success: <img src="./StatusSvgIcon/Rtsuccess.svg" alt="Success" />,
+                                            pending: <img src="./StatusSvgIcon/Rtpending.svg" alt="Pending" />,
+                                            success: <img src="./StatusSvgIcon/Rtsuccess.svg" alt="Success" />,
                                             failed: <img src="./StatusSvgIcon/Rtfailed.svg" alt="Failed" />
                                         }[item.STATUS?.toLowerCase()] || (
-                                                <img src="./StatusSvgIcon/Rtfailed.svg" alt="Failed" />
+                                                <img src="./StatusSvgIcon/Rtpending.svg" alt="Pending" />
                                             )}
                                     </td>
-                                    <td>{new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.TransactionAmount)}</td>
-                                    <td>{item.BankPayoutId}</td>
-                                    <td>{item.AccountHolderName}</td>
-                                    <td>{item.AccountNo}</td>
-                                    <td>{item.PayinMobileNo}</td>
-                                    <td>{item.UpiId}</td>
+                                    <td>{new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.Amount)}</td>
+                                    <td>{item.BankUTRNo}</td>
+                                    <td>{item.TransactionType}</td>
                                     <td>{new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.OpenBalance)}</td>
+                                    <td>{new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.Commission)}</td>
+                                    <td>{new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.Tds)}</td>
                                     <td>{new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.Surcharge)}</td>
                                     <td>{new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.Gst)}</td>
                                     <td>{new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.PayableAmount)}</td>
-                                    <td>{new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.ClosedBalance)}</td>
-                                    <td>{item.ReferenceId}</td>
+                                    <td>{new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.ClosedBal)}</td>
                                     <td>{item.SystemUniqueId}</td>
-                                    <td>{item.ApiUniqueId}</td>
-                                    <td>
-                                        <button onClick={() => { setPayoutTrData(item); setIsRecieptOpen(true) }}><FaReceipt /></button>
-                                    </td>
-                                    <td>
-                                        {{
-                                            yes: <img src="./icons/Rtraise.svg" alt="" />,
-                                            no: <img src="./icons/Rtraise.svg" alt="" />
-                                        }[item.RasieComplaint?.toLowerCase()] || (
-                                                <img src="./icons/Rtticket.svg" />
-                                            )}
-                                    </td>
-                                    <td>{item.RasieChargeBack}</td>
-                                    <td>{item.TransactionFrom}</td>
-                                    <td><button onClick={() => { setPayoutTrData(item); setIsCallBackOpen(true) }}><FaReceipt /></button></td>
-                                    <td><button onClick={() => { setPayoutTrData(item); setIsCheckStatusOpen(true) }}><FaReceipt /></button></td>
-                                    <td>{item.IsFraud}</td>
-                                    <td>{item.IPAddress}</td>
-                                    <td>{item.IPCity}</td>
-                                    <td>{item.IPState}</td>
+                                    <td>{item.Comment}</td>
                                 </tr>
                             )) : (<tr>
                                 <td colSpan="29" className="text-center text-muted">

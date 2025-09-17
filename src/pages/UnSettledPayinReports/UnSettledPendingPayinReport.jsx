@@ -2,9 +2,9 @@ import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { BindUserListByRoleId, BindAPIListByServiceName } from "../../services/Commonapi";
-import { FaFileInvoice, FaReceipt } from "react-icons/fa";
+import { FaEye, FaReceipt } from "react-icons/fa";
 import Swal from "sweetalert2";
-import { GetUnsettledPayinReport } from "../../services/PayinReport";
+import { GetUnsettledPayinReport, PayinCheckStatusTransaction } from "../../services/PayinReport";
 
 export default function UnSettledPendingPayinReport() {
     const [userList, setUserListValue] = useState(0);
@@ -108,6 +108,39 @@ export default function UnSettledPendingPayinReport() {
                 confirmButtonText: "Ok"
             });
         } finally {
+
+        }
+    }
+    
+    const UpdateCheckStatus=async(data)=>{
+        try{
+const _result=await PayinCheckStatusTransaction({
+    payinId:data.Id
+});
+ if (_result.statuscode === 200) {
+                Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: _result.message || "Check Status going process",
+                    confirmButtonText: "Ok"
+                });                
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: _result.message || "something went wrong",
+                    confirmButtonText: "Ok"
+                });
+            }
+
+        }catch(err){
+Swal.fire({
+                icon: "warning",
+                title: "Warning",
+                text: err.message || "An unexpected error occurred",
+                confirmButtonText: "Ok"
+            });
+        }finally{
 
         }
     }
@@ -238,7 +271,7 @@ export default function UnSettledPendingPayinReport() {
                                     <td>{item.IPAddress}</td>                                    
                                     <td>{item.IPCity}</td>
                                     <td>{item.IPState}</td>
-                                    <td></td>
+                                    <td><button onClick={()=>UpdateCheckStatus(item)}><FaEye /></button></td>
                                 </tr>
                             )) : (<tr>
                                 <td colSpan="29" className="text-center text-muted">

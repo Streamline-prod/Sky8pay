@@ -28,3 +28,12 @@ export const GetUnsettledPayinLedger = async (payload = {}) => {
         throw error;
     }
 }
+
+export const PayinCheckStatusTransaction = async (payload = {}) => {
+    try {
+        const response = await api.post("/Payin/CheckStatus", payload);
+        return response.data;
+    } catch (error) {
+        console.log("Error fetch payin check status", error);
+    }
+}
